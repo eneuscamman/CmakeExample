@@ -1,0 +1,33 @@
+#ifndef MTP_BLAS_INTERFACE_SETUP_H
+#define MTP_BLAS_INTERFACE_SETUP_H
+
+#cmakedefine01 MTP_HAVE_BLAS_MACOS
+#cmakedefine01 MTP_HAVE_BLAS_MKL
+#cmakedefine01 MTP_HAVE_BLAS_GENERIC
+#cmakedefine01 MTP_HAVE_CBLAS
+
+#cmakedefine01 MTP_BLAS_MANGLE_UNDERSCORE_NONE
+#cmakedefine01 MTP_BLAS_MANGLE_UNDERSCORE_BEFORE
+#cmakedefine01 MTP_BLAS_MANGLE_UNDERSCORE_AFTER
+
+#if MTP_HAVE_BLAS_MACOS
+#include <${MTP_APPLE_ACCELERATE_HEADER}>
+#endif
+
+#if MTP_HAVE_BLAS_MKL
+#include <${MTP_MKL_HEADER}>
+#endif
+
+#if MTP_HAVE_BLAS_GENERIC
+    #if MTP_BLAS_MANGLE_UNDERSCORE_AFTER
+        #define MTP_BLAS_MANGLE(X) X##_
+    #endif
+    #if MTP_BLAS_MANGLE_UNDERSCORE_BEFORE
+        #define MTP_BLAS_MANGLE(X) _##X
+    #endif
+    #if MTP_BLAS_MANGLE_UNDERSCORE_NONE
+        #define MTP_BLAS_MANGLE(X) X
+    #endif
+#endif
+
+#endif
